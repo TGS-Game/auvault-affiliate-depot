@@ -1,0 +1,484 @@
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.colSpan2 {
+  grid-column: span 1;
+}
+
+/* When 5 cards: row 1 = Analytics (span 2) + Commissions, row 2 = Depots + Checklist + Calander */
+.grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.colSpan2 {
+  grid-column: span 2;
+}
+
+.pillBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+  background: transparent;
+  border: 1px solid rgba(209, 173, 115, 0.45);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.pillBtn:hover {
+  background: rgba(209, 173, 115, 0.12);
+  border-color: var(--gold);
+}
+
+/* ===== ANALYTICS ===== */
+.analyticsTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.chartLegend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotPaid {
+  background: var(--gold);
+}
+
+.dotOutstanding {
+  background: var(--text-light);
+}
+
+.dotFurther {
+  background: #9c4d52;
+}
+
+.chart {
+  position: relative;
+  height: 220px;
+  margin: 0 0 12px 28px;
+  padding-bottom: 24px;
+  padding-right: 6px;
+}
+
+.chartGrid {
+  position: absolute;
+  inset: 0 6px 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.gridLine {
+  display: block;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.chartSvg {
+  position: absolute;
+  inset: 0 6px 24px 0;
+  width: calc(100% - 6px);
+  height: calc(100% - 24px);
+  overflow: visible;
+}
+
+.chartYAxis {
+  position: absolute;
+  inset: 0 auto 24px 0;
+  width: 28px;
+  left: -28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: right;
+  padding-right: 6px;
+}
+
+.chartXAxis {
+  position: absolute;
+  inset: auto 6px 0 0;
+  height: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding-top: 4px;
+}
+
+.analyticsFoot {
+  display: flex;
+}
+
+/* ===== COMMISSIONS ===== */
+.commissionList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  list-style: none;
+}
+
+.commissionRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.commissionRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.commissionLabel {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-light);
+}
+
+.commissionValue {
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--gold);
+}
+
+/* ===== DEPOTS ===== */
+.depotsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.depotCircles {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.depotCircleLg,
+.depotCircleSm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.depotCircleLg::before,
+.depotCircleSm::before {
+  content: '';
+  display: block;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(209, 173, 115, 0.18) 35%, transparent 70%);
+  border: 3px solid var(--gold);
+}
+
+.depotCircleLg::before {
+  width: 120px;
+  height: 120px;
+}
+
+.depotCircleSm::before {
+  width: 96px;
+  height: 96px;
+}
+
+.depotCircleLg,
+.depotCircleSm {
+  position: relative;
+}
+
+.depotCircleNumber {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-weight: 600;
+  color: var(--text-light);
+  pointer-events: none;
+}
+
+.depotCircleLg .depotCircleNumber {
+  height: 120px;
+  font-size: 40px;
+}
+
+.depotCircleSm .depotCircleNumber {
+  height: 96px;
+  font-size: 32px;
+}
+
+.depotCircleLabel {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.depotsTotalRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background: rgba(209, 173, 115, 0.35);
+  width: 100%;
+  margin: 8px 0;
+}
+
+.depotsTotal {
+  font-family: var(--font);
+  font-size: 18px;
+  color: var(--text-light);
+  font-weight: 600;
+  text-align: right;
+}
+
+.depotsTotalNumber {
+  font-style: italic;
+  color: var(--gold);
+  font-size: 22px;
+}
+
+/* ===== CHECKLIST ===== */
+.checklistBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklistHeading {
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+  margin: 0 0 8px 0;
+  letter-spacing: 0.02em;
+}
+
+.checklistList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.checklistItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font);
+  font-size: 15px;
+  color: var(--text-light);
+}
+
+.checklistText {
+  flex: 1;
+}
+
+.checklistCount {
+  color: var(--gold);
+  font-style: italic;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.viewAll {
+  display: inline-block;
+  align-self: flex-end;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 6px;
+  cursor: pointer;
+}
+
+.viewAll:hover {
+  text-decoration: underline;
+}
+
+/* ===== CALANDER ===== */
+.calBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.calHead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--text-light);
+  font-family: var(--font);
+}
+
+.calMonth {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.calNavBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(209, 173, 115, 0.5);
+  color: var(--gold);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.calNavBtn:hover {
+  background: rgba(209, 173, 115, 0.12);
+}
+
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calWeekday {
+  text-align: center;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 0;
+}
+
+.calCell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text-light);
+  border-radius: 50%;
+  cursor: default;
+  transition: background 0.15s ease;
+}
+
+.calCell:hover:not(.calCellEmpty):not(.calCellToday) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.calCellEmpty {
+  visibility: hidden;
+}
+
+.calCellToday {
+  background: var(--gold);
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1199.98px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .colSpan2 {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .colSpan2 {
+    grid-column: span 1;
+  }
+
+  .chart {
+    height: 180px;
+    margin-left: 24px;
+  }
+
+  .depotCircleLg::before {
+    width: 100px;
+    height: 100px;
+  }
+
+  .depotCircleLg .depotCircleNumber {
+    height: 100px;
+    font-size: 32px;
+  }
+
+  .depotCircleSm::before {
+    width: 80px;
+    height: 80px;
+  }
+
+  .depotCircleSm .depotCircleNumber {
+    height: 80px;
+    font-size: 26px;
+  }
+
+  .chartLegend {
+    font-size: 12px;
+    gap: 12px;
+  }
+}
