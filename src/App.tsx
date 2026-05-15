@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import ProtectedRoute from './components/ProtectedRoute'
+import StaffRoute from './components/StaffRoute'
 import Layout from './components/Layout'
 import { RoleProvider } from './context/RoleContext'
 import { ToastProvider } from './context/ToastContext'
@@ -16,6 +17,12 @@ import AccountBalance from './pages/Business/AccountBalance'
 import Settlements from './pages/Business/Settlements'
 import Conditions from './pages/Business/Conditions'
 import AcquisitionCommission from './pages/Business/AcquisitionCommission'
+import StaffPartners from './pages/Staff/StaffPartners'
+import StaffPartnerDetail from './pages/Staff/StaffPartnerDetail'
+import StaffApprovals from './pages/Staff/StaffApprovals'
+import StaffBankReconciliation from './pages/Staff/StaffBankReconciliation'
+import StaffReports from './pages/Staff/StaffReports'
+import StaffSystem from './pages/Staff/StaffSystem'
 import './App.css'
 
 function LoginRoute() {
@@ -29,6 +36,14 @@ function Protected({ children }: { children: ReactNode }) {
     <ProtectedRoute>
       <Layout>{children}</Layout>
     </ProtectedRoute>
+  )
+}
+
+function StaffProtected({ children }: { children: ReactNode }) {
+  return (
+    <StaffRoute>
+      <Layout>{children}</Layout>
+    </StaffRoute>
   )
 }
 
@@ -48,6 +63,12 @@ export default function App() {
           <Route path="/business/settlements" element={<Protected><Settlements /></Protected>} />
           <Route path="/business/conditions" element={<Protected><Conditions /></Protected>} />
           <Route path="/business/acquisition-commission" element={<Protected><AcquisitionCommission /></Protected>} />
+          <Route path="/staff/partners" element={<StaffProtected><StaffPartners /></StaffProtected>} />
+          <Route path="/staff/partners/:partnerId" element={<StaffProtected><StaffPartnerDetail /></StaffProtected>} />
+          <Route path="/staff/approvals" element={<StaffProtected><StaffApprovals /></StaffProtected>} />
+          <Route path="/staff/bank-reconciliation" element={<StaffProtected><StaffBankReconciliation /></StaffProtected>} />
+          <Route path="/staff/reports" element={<StaffProtected><StaffReports /></StaffProtected>} />
+          <Route path="/staff/system" element={<StaffProtected><StaffSystem /></StaffProtected>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </ToastProvider>
