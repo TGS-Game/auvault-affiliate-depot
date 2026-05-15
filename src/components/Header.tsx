@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useRole } from '../context/RoleContext'
@@ -11,13 +11,19 @@ import {
 } from './icons'
 import styles from './Header.module.css'
 
+type DropdownItem = { label: string; to: string }
+
 type NavItem = {
   label: string
   to?: string
-  dropdown?: { label: string; to: string }[]
+  dropdown?: DropdownItem[]
+  /** Identifier used to track which dropdown is open */
+  key?: string
+  /** Visual variant — 'staff' adds the burgundy indicator */
+  variant?: 'default' | 'staff'
 }
 
-const BUSINESS_ITEMS: { label: string; to: string }[] = [
+const BUSINESS_ITEMS: DropdownItem[] = [
   { label: 'Overview', to: '/business/overview' },
   { label: 'Downline', to: '/business/downline' },
   { label: 'New Business Partner', to: '/business/new-business-partner' },
@@ -32,28 +38,50 @@ const BUSINESS_ITEMS: { label: string; to: string }[] = [
   },
 ]
 
-const NAV: NavItem[] = [
-  { label: 'HOME', to: '/' },
-  { label: 'BUSINESS', dropdown: BUSINESS_ITEMS },
-  // Stubs for parity with Figma — not wired to dedicated routes yet
-  { label: 'CUSTOMER', to: '/' },
-  { label: 'TRANSACTION', to: '/' },
-  { label: 'RESOURCES', to: '/' },
+const STAFF_ITEMS: DropdownItem[] = [
+  { label: 'All Partners', to: '/staff/partners' },
+  { label: 'Approvals', to: '/staff/approvals' },
+  { label: 'Bank Reconciliation', to: '/staff/bank-reconciliation' },
+  { label: 'Reports', to: '/staff/reports' },
+  { label: 'System', to: '/staff/system' },
 ]
 
+const BASE_NAV: NavItem[] = [
+  { label: 'HOME', to: '/' },
+  { label: 'BUSINESS', dropdown: BUSINESS_ITEMS, key: 'business' },
+  { label: 'CUSTOMER', to: '/customer' },
+  { label: 'TRANSACTION', to: '/transaction' },
+  { label: 'RESOURCES', to: '/resources' },
+]
+
+const STAFF_NAV_ITEM: NavItem = {
+  label: 'STAFF',
+  dropdown: STAFF_ITEMS,
+  key: 'staff',
+  variant: 'staff',
+}
+
 const TABLET_BREAKPOINT = 1100
+const CLOSE_DELAY_MS = 300
 
 export default function Header() {
   const navigate = useNavigate()
   const { logout } = useAuth()
-  const { role } = useRole()
+  const { role, isStaff } = useRole()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [businessOpen, setBusinessOpen] = useState(false)
-  const [mobileBusinessOpen, setMobileBusinessOpen] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [mobileOpenDropdowns, setMobileOpenDropdowns] = useState<Set<string>>(
+    new Set(),
+  )
   const [isCompact, setIsCompact] = useState<boolean>(() =>
     typeof window === 'undefined' ? false : window.innerWidth < TABLET_BREAKPOINT,
   )
   const closeTimer = useRef<number | null>(null)
+
+  const navItems = useMemo<NavItem[]>(
+    () => (isStaff ? [...BASE_NAV, STAFF_NAV_ITEM] : BASE_NAV),
+    [isStaff],
+  )
 
   useEffect(() => {
     const onResize = () => setIsCompact(window.innerWidth < TABLET_BREAKPOINT)
@@ -82,22 +110,22 @@ export default function Header() {
     }
   }, [])
 
-  const openBusiness = () => {
+  const openDropdownNow = (key: string) => {
     if (closeTimer.current !== null) {
       window.clearTimeout(closeTimer.current)
       closeTimer.current = null
     }
-    setBusinessOpen(true)
+    setOpenDropdown(key)
   }
 
-  const scheduleCloseBusiness = () => {
+  const scheduleClose = () => {
     if (closeTimer.current !== null) {
       window.clearTimeout(closeTimer.current)
     }
     closeTimer.current = window.setTimeout(() => {
-      setBusinessOpen(false)
+      setOpenDropdown(null)
       closeTimer.current = null
-    }, 300)
+    }, CLOSE_DELAY_MS)
   }
 
   const handleSignOut = () => {
@@ -106,11 +134,19 @@ export default function Header() {
     navigate('/login', { replace: true })
   }
 
-  const handleBusinessClickCompact = () => {
-    // tablet/mobile: clicking BUSINESS toggles
+  const handleDropdownClickCompact = (key: string) => {
     if (isCompact) {
-      setBusinessOpen((v) => !v)
+      setOpenDropdown((v) => (v === key ? null : key))
     }
+  }
+
+  const toggleMobileDropdown = (key: string) => {
+    setMobileOpenDropdowns((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
   }
 
   return (
@@ -134,39 +170,44 @@ export default function Header() {
         </NavLink>
 
         <nav className={styles.nav} aria-label="Primary">
-          {NAV.map((item) => {
-            if (item.dropdown) {
+          {navItems.map((item) => {
+            if (item.dropdown && item.key) {
+              const isOpen = openDropdown === item.key
+              const isStaffVariant = item.variant === 'staff'
               return (
                 <div
                   key={item.label}
                   className={styles.navItemWrap}
-                  onMouseEnter={isCompact ? undefined : openBusiness}
-                  onMouseLeave={isCompact ? undefined : scheduleCloseBusiness}
+                  onMouseEnter={
+                    isCompact ? undefined : () => openDropdownNow(item.key!)
+                  }
+                  onMouseLeave={isCompact ? undefined : scheduleClose}
                 >
                   <button
                     type="button"
-                    className={`${styles.navLink} ${styles.navLinkBtn}${businessOpen ? ' ' + styles.navLinkActive : ''}`}
-                    onClick={handleBusinessClickCompact}
+                    className={`${styles.navLink} ${styles.navLinkBtn}${isOpen ? ' ' + styles.navLinkActive : ''}${isStaffVariant ? ' ' + styles.navLinkStaff : ''}`}
+                    onClick={() => handleDropdownClickCompact(item.key!)}
                     aria-haspopup="menu"
-                    aria-expanded={businessOpen}
+                    aria-expanded={isOpen}
                   >
                     {item.label}
                     <ChevronDownIcon size={14} className={styles.navChevron} />
                   </button>
 
-                  {/* invisible hover bridge so the cursor never falls between the trigger and the menu */}
-                  {!isCompact && businessOpen && (
+                  {!isCompact && isOpen && (
                     <span aria-hidden className={styles.bridge} />
                   )}
 
-                  {businessOpen && !isCompact && (
+                  {isOpen && !isCompact && (
                     <div
-                      className={styles.dropdown}
+                      className={`${styles.dropdown}${isStaffVariant ? ' ' + styles.dropdownStaff : ''}`}
                       role="menu"
-                      onMouseEnter={openBusiness}
-                      onMouseLeave={scheduleCloseBusiness}
+                      onMouseEnter={() => openDropdownNow(item.key!)}
+                      onMouseLeave={scheduleClose}
                     >
-                      <p className={styles.dropdownHeading}>Business</p>
+                      <p className={styles.dropdownHeading}>
+                        {item.label.toLowerCase()}
+                      </p>
                       {item.dropdown.map((sub) => (
                         <NavLink
                           key={sub.to}
@@ -174,7 +215,7 @@ export default function Header() {
                           className={({ isActive }) =>
                             `${styles.dropdownItem}${isActive ? ' ' + styles.dropdownItemActive : ''}`
                           }
-                          onClick={() => setBusinessOpen(false)}
+                          onClick={() => setOpenDropdown(null)}
                           role="menuitem"
                         >
                           {sub.label}
@@ -232,23 +273,25 @@ export default function Header() {
         aria-hidden={!menuOpen}
       >
         <nav className={styles.drawerNav} aria-label="Mobile">
-          {NAV.map((item) => {
-            if (item.dropdown) {
+          {navItems.map((item) => {
+            if (item.dropdown && item.key) {
+              const isOpen = mobileOpenDropdowns.has(item.key)
+              const isStaffVariant = item.variant === 'staff'
               return (
                 <div key={item.label} className={styles.drawerGroup}>
                   <button
                     type="button"
-                    className={`${styles.drawerLink} ${styles.drawerGroupBtn}`}
-                    onClick={() => setMobileBusinessOpen((v) => !v)}
-                    aria-expanded={mobileBusinessOpen}
+                    className={`${styles.drawerLink} ${styles.drawerGroupBtn}${isStaffVariant ? ' ' + styles.drawerLinkStaff : ''}`}
+                    onClick={() => toggleMobileDropdown(item.key!)}
+                    aria-expanded={isOpen}
                   >
                     <span>{item.label}</span>
                     <ChevronDownIcon
                       size={16}
-                      className={`${styles.drawerChevron}${mobileBusinessOpen ? ' ' + styles.drawerChevronOpen : ''}`}
+                      className={`${styles.drawerChevron}${isOpen ? ' ' + styles.drawerChevronOpen : ''}`}
                     />
                   </button>
-                  {mobileBusinessOpen && (
+                  {isOpen && (
                     <div className={styles.drawerSubgroup}>
                       {item.dropdown.map((sub) => (
                         <NavLink
