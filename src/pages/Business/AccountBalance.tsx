@@ -1,5 +1,8 @@
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
+import { usePartnerView } from '../../context/PartnerViewContext'
+import { scaleAmount } from '../../utils/scale'
 import styles from './Business.module.css'
 
 const SUMMARY = [
@@ -18,11 +21,17 @@ const HISTORY = [
 ]
 
 export default function AccountBalance() {
+  const { factor, partner } = usePartnerView()
+
   return (
     <div className={styles.page}>
       <PageHeader
         title="Account Balance"
-        subtitle="Earnings, holds, and withdrawals"
+        subtitle={
+          partner
+            ? `Balance for ${partner.name}`
+            : 'Earnings, holds, and withdrawals'
+        }
         actions={
           <button type="button" className={styles.btnPrimary}>
             Withdraw
@@ -30,12 +39,14 @@ export default function AccountBalance() {
         }
       />
 
+      <PartnerSelector />
+
       <Card noTitle title="">
         <div className={styles.statGrid}>
           {SUMMARY.map((s) => (
             <div key={s.label} className={styles.stat}>
               <span className={styles.statLabel}>{s.label}</span>
-              <span className={styles.statValue}>{s.value}</span>
+              <span className={styles.statValue}>{scaleAmount(s.value, factor)}</span>
               <span className={styles.statSubLabel}>{s.sub}</span>
             </div>
           ))}
@@ -59,7 +70,7 @@ export default function AccountBalance() {
                   <td>{h.date}</td>
                   <td>{h.type}</td>
                   <td>{h.desc}</td>
-                  <td className={styles.amount}>{h.amount}</td>
+                  <td className={styles.amount}>{scaleAmount(h.amount, factor)}</td>
                 </tr>
               ))}
             </tbody>

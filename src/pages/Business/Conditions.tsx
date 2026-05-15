@@ -1,5 +1,6 @@
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
 import styles from './Business.module.css'
 
 export default function Conditions() {
@@ -9,6 +10,8 @@ export default function Conditions() {
         title="Conditions"
         subtitle="Terms governing your affiliate relationship"
       />
+
+      <PartnerSelector />
 
       <Card title="AFFILIATE TERMS &amp; CONDITIONS">
         <div className={styles.prose}>

@@ -1,5 +1,8 @@
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
+import { usePartnerView } from '../../context/PartnerViewContext'
+import { scaleAmount } from '../../utils/scale'
 import styles from './Business.module.css'
 
 const STATS = [
@@ -17,20 +20,28 @@ const RECENT = [
 ]
 
 export default function Overview() {
+  const { factor, partner } = usePartnerView()
+
   return (
     <div className={styles.page}>
       <PageHeader
         title="Business Overview"
-        subtitle="Affiliate operations at a glance"
+        subtitle={
+          partner
+            ? `Affiliate operations for ${partner.name}`
+            : 'Affiliate operations at a glance'
+        }
       />
+
+      <PartnerSelector />
 
       <Card noTitle title="">
         <div className={styles.statGrid}>
           {STATS.map((s) => (
             <div key={s.label} className={styles.stat}>
               <span className={styles.statLabel}>{s.label}</span>
-              <span className={styles.statValue}>{s.value}</span>
-              <span className={styles.statSubLabel}>{s.sub}</span>
+              <span className={styles.statValue}>{scaleAmount(s.value, factor)}</span>
+              <span className={styles.statSubLabel}>{scaleAmount(s.sub, factor)}</span>
             </div>
           ))}
         </div>
@@ -51,7 +62,7 @@ export default function Overview() {
                 <tr key={i}>
                   <td>{r.date}</td>
                   <td>{r.event}</td>
-                  <td>{r.who}</td>
+                  <td>{scaleAmount(r.who, factor)}</td>
                 </tr>
               ))}
             </tbody>

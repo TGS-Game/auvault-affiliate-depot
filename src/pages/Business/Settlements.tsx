@@ -1,5 +1,8 @@
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
+import { usePartnerView } from '../../context/PartnerViewContext'
+import { scaleAmount } from '../../utils/scale'
 import styles from './Business.module.css'
 
 type Settlement = {
@@ -21,17 +24,21 @@ const ROWS: Settlement[] = [
 ]
 
 export default function Settlements() {
+  const { factor, partner } = usePartnerView()
+
   return (
     <div className={styles.page}>
       <PageHeader
         title="Settlements"
-        subtitle="Monthly payout history"
+        subtitle={partner ? `Settlements for ${partner.name}` : 'Monthly payout history'}
         actions={
           <button type="button" className={styles.btnSecondary}>
             Export CSV
           </button>
         }
       />
+
+      <PartnerSelector />
 
       <Card title="SETTLEMENT RUNS">
         <div className={styles.tableWrap}>
@@ -53,9 +60,9 @@ export default function Settlements() {
                   <td>{r.id}</td>
                   <td>{r.period}</td>
                   <td>{r.payoutDate}</td>
-                  <td>{r.gross}</td>
-                  <td>{r.fees}</td>
-                  <td className={styles.amount}>{r.net}</td>
+                  <td>{scaleAmount(r.gross, factor)}</td>
+                  <td>{scaleAmount(r.fees, factor)}</td>
+                  <td className={styles.amount}>{scaleAmount(r.net, factor)}</td>
                   <td>
                     <span
                       className={`${styles.statusBadge} ${r.status === 'paid' ? styles.statusPaid : styles.statusPending}`}

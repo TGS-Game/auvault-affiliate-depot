@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
 import { LockIcon } from '../../components/icons'
 import styles from './Business.module.css'
 
@@ -51,6 +52,7 @@ export default function LockAccount() {
         title="Lock an Account"
         subtitle="Suspend access pending review"
       />
+      <PartnerSelector />
       <Card
         title="LOCK ACCOUNT"
         toolbar={<LockIcon size={20} />}

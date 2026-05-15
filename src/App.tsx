@@ -6,6 +6,7 @@ import StaffRoute from './components/StaffRoute'
 import Layout from './components/Layout'
 import { RoleProvider } from './context/RoleContext'
 import { ToastProvider } from './context/ToastContext'
+import { PartnerViewProvider } from './context/PartnerViewContext'
 import Login from './pages/Login/Login'
 import Home from './pages/Home/Home'
 import Overview from './pages/Business/Overview'
@@ -51,6 +52,7 @@ export default function App() {
   return (
     <RoleProvider>
       <ToastProvider>
+        <PartnerViewProvider>
         <Routes>
           <Route path="/login" element={<LoginRoute />} />
           <Route path="/" element={<Protected><Home /></Protected>} />
@@ -71,6 +73,7 @@ export default function App() {
           <Route path="/staff/system" element={<StaffProtected><StaffSystem /></StaffProtected>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </PartnerViewProvider>
       </ToastProvider>
     </RoleProvider>
   )

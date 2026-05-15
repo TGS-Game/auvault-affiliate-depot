@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
 import styles from './Business.module.css'
 
 type Step1 = {
@@ -77,6 +78,8 @@ export default function NewBusinessPartner() {
         title="New Business Partner"
         subtitle="Step-by-step partner onboarding"
       />
+
+      <PartnerSelector />
 
       <Card noTitle title="">
         <div className={styles.steps}>

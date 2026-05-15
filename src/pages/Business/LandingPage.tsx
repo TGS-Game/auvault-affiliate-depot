@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
 import { GlobeIcon } from '../../components/icons'
 import styles from './Business.module.css'
 
@@ -17,6 +18,8 @@ export default function LandingPage() {
         title="Landing Page"
         subtitle="Customize your affiliate landing experience"
       />
+
+      <PartnerSelector />
 
       <Card title="LANDING URL">
         <div className={styles.landingUrl}>

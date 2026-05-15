@@ -1,5 +1,8 @@
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
+import { usePartnerView } from '../../context/PartnerViewContext'
+import { scaleAmount } from '../../utils/scale'
 import styles from './Business.module.css'
 
 type Tier = {
@@ -24,12 +27,16 @@ const WORKED = [
 ]
 
 export default function AcquisitionCommission() {
+  const { factor } = usePartnerView()
+
   return (
     <div className={styles.page}>
       <PageHeader
         title="Acquisition Commission"
         subtitle="Current rate card, by tier"
       />
+
+      <PartnerSelector />
 
       <Card title="RATE CARD">
         <div className={styles.tableWrap}>
@@ -61,7 +68,9 @@ export default function AcquisitionCommission() {
           {WORKED.map((w, i) => (
             <li key={i} className={styles.reviewItem}>
               <span className={styles.reviewLabel}>{w.label}</span>
-              <span className={`${styles.reviewValue} ${styles.amount}`}>{w.value}</span>
+              <span className={`${styles.reviewValue} ${styles.amount}`}>
+                {scaleAmount(w.value, factor)}
+              </span>
             </li>
           ))}
         </ul>

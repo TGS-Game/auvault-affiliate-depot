@@ -1,5 +1,8 @@
 import Card from '../../components/Card'
 import PageHeader from '../../components/PageHeader'
+import PartnerSelector from '../../components/PartnerSelector'
+import { usePartnerView } from '../../context/PartnerViewContext'
+import { scaleAmount } from '../../utils/scale'
 import styles from './Business.module.css'
 
 type Row = {
@@ -28,12 +31,23 @@ const statusClass = (s: Row['status']) => {
 }
 
 export default function Downline() {
+  const { factor, partner } = usePartnerView()
+  const visibleRows = partner
+    ? ROWS.slice(0, Math.max(2, Math.round(ROWS.length * Math.min(1, factor * 4))))
+    : ROWS
+
   return (
     <div className={styles.page}>
       <PageHeader
         title="Downline"
-        subtitle="3-tier network — 8 active relationships"
+        subtitle={
+          partner
+            ? `${visibleRows.length}-member downline · ${partner.name}`
+            : '3-tier network — 8 active relationships'
+        }
       />
+
+      <PartnerSelector />
 
       <Card title="DOWNLINE PARTNERS">
         <div className={styles.tableWrap}>
@@ -48,12 +62,12 @@ export default function Downline() {
               </tr>
             </thead>
             <tbody>
-              {ROWS.map((r) => (
+              {visibleRows.map((r) => (
                 <tr key={r.name}>
                   <td>{r.name}</td>
                   <td>T{r.tier}</td>
                   <td>{r.joined}</td>
-                  <td className={styles.amount}>{r.volume}</td>
+                  <td className={styles.amount}>{scaleAmount(r.volume, factor)}</td>
                   <td>
                     <span className={`${styles.statusBadge} ${statusClass(r.status)}`}>
                       {r.status}
