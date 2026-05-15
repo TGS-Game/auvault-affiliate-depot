@@ -18,6 +18,9 @@ import AccountBalance from './pages/Business/AccountBalance'
 import Settlements from './pages/Business/Settlements'
 import Conditions from './pages/Business/Conditions'
 import AcquisitionCommission from './pages/Business/AcquisitionCommission'
+import CustomerPlaceholder from './pages/Placeholders/CustomerPlaceholder'
+import TransactionPlaceholder from './pages/Placeholders/TransactionPlaceholder'
+import ResourcesPlaceholder from './pages/Placeholders/ResourcesPlaceholder'
 import StaffPartners from './pages/Staff/StaffPartners'
 import StaffPartnerDetail from './pages/Staff/StaffPartnerDetail'
 import StaffApprovals from './pages/Staff/StaffApprovals'
@@ -65,6 +68,9 @@ export default function App() {
           <Route path="/business/settlements" element={<Protected><Settlements /></Protected>} />
           <Route path="/business/conditions" element={<Protected><Conditions /></Protected>} />
           <Route path="/business/acquisition-commission" element={<Protected><AcquisitionCommission /></Protected>} />
+          <Route path="/customer" element={<Protected><CustomerPlaceholder /></Protected>} />
+          <Route path="/transaction" element={<Protected><TransactionPlaceholder /></Protected>} />
+          <Route path="/resources" element={<Protected><ResourcesPlaceholder /></Protected>} />
           <Route path="/staff/partners" element={<StaffProtected><StaffPartners /></StaffProtected>} />
           <Route path="/staff/partners/:partnerId" element={<StaffProtected><StaffPartnerDetail /></StaffProtected>} />
           <Route path="/staff/approvals" element={<StaffProtected><StaffApprovals /></StaffProtected>} />

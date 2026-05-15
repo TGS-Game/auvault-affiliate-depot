@@ -131,6 +131,28 @@ export default function Login() {
               </p>
             )}
           </form>
+
+          <div className={styles.demo}>
+            <p className={styles.demoTitle}>Demo access</p>
+            <dl className={styles.demoList}>
+              <div className={styles.demoRow}>
+                <dt>Partner</dt>
+                <dd>
+                  <code>partner@auvault.com</code>
+                  <span className={styles.demoSep}>/</span>
+                  <code>partner123</code>
+                </dd>
+              </div>
+              <div className={styles.demoRow}>
+                <dt>Staff</dt>
+                <dd>
+                  <code>staff@auvault.com</code>
+                  <span className={styles.demoSep}>/</span>
+                  <code>staff123</code>
+                </dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </div>
     </div>
