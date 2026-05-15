@@ -224,6 +224,40 @@
   background: rgba(209, 173, 115, 0.14);
 }
 
+.rolePill {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  margin-left: 4px;
+  user-select: none;
+  border: 1px solid transparent;
+}
+
+.rolePillPartner {
+  background: var(--gold);
+  color: var(--text-dark);
+  border-color: var(--gold-dark);
+}
+
+.rolePillStaff {
+  background: var(--burgundy);
+  color: var(--gold);
+  border-color: var(--burgundy-dark);
+}
+
+.rolePillDrawer {
+  display: none;
+  align-self: flex-start;
+  margin: 4px 24px 0 24px;
+}
+
 .drawer {
   position: fixed;
   top: 0;
@@ -379,6 +413,14 @@
 
   .icons .signout {
     display: none;
+  }
+
+  .icons .rolePill:not(.rolePillDrawer) {
+    display: none;
+  }
+
+  .rolePillDrawer {
+    display: inline-flex;
   }
 
   .signoutDrawer {

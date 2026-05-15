@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { useRole } from '../context/RoleContext'
 import {
   SettingsIcon,
   BellIcon,
@@ -45,6 +46,7 @@ const TABLET_BREAKPOINT = 1100
 export default function Header() {
   const navigate = useNavigate()
   const { logout } = useAuth()
+  const { role } = useRole()
   const [menuOpen, setMenuOpen] = useState(false)
   const [businessOpen, setBusinessOpen] = useState(false)
   const [mobileBusinessOpen, setMobileBusinessOpen] = useState(false)
@@ -214,6 +216,14 @@ export default function Header() {
           <button type="button" className={styles.signout} onClick={handleSignOut}>
             Sign Out
           </button>
+          {role && (
+            <span
+              className={`${styles.rolePill} ${role === 'staff' ? styles.rolePillStaff : styles.rolePillPartner}`}
+              aria-label={`Current role: ${role}`}
+            >
+              {role.toUpperCase()}
+            </span>
+          )}
         </div>
       </div>
 
@@ -286,6 +296,15 @@ export default function Header() {
               <GlobeIcon />
             </button>
           </div>
+
+          {role && (
+            <span
+              className={`${styles.rolePill} ${styles.rolePillDrawer} ${role === 'staff' ? styles.rolePillStaff : styles.rolePillPartner}`}
+              aria-label={`Current role: ${role}`}
+            >
+              {role.toUpperCase()}
+            </span>
+          )}
 
           <button
             type="button"
