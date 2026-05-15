@@ -431,6 +431,236 @@
   font-weight: 700;
 }
 
+.calCell {
+  position: relative;
+}
+
+.calActivityDot {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.pendingDot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  background: rgba(209, 173, 115, 0.18);
+}
+
+/* ===== STAFF DASHBOARD ===== */
+.overviewGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.overviewStat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+}
+
+.overviewLabel {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.overviewValue {
+  font-family: var(--font);
+  font-size: 26px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--text-light);
+}
+
+.approvalsBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--gold);
+  color: var(--text-dark);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--gold-dark);
+  transition: filter 0.15s ease;
+}
+
+.approvalsBadge:hover {
+  filter: brightness(1.06);
+}
+
+.pendingActionList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.pendingActionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: var(--font);
+}
+
+.pendingActionRow:last-child {
+  border-bottom: none;
+}
+
+.pendingActionText {
+  flex: 1;
+  font-size: 15px;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+.pendingActionEmphasis {
+  color: var(--gold);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--gold-gradient);
+  color: var(--text-dark);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--gold-dark);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+  white-space: nowrap;
+}
+
+.actionBtn:hover {
+  filter: brightness(1.06);
+}
+
+.leaderboardList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.leaderboardRow {
+  display: grid;
+  grid-template-columns: 28px 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: var(--font);
+}
+
+.leaderboardRow:last-child {
+  border-bottom: none;
+}
+
+.leaderboardRank {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gold);
+  font-style: italic;
+}
+
+.leaderboardName {
+  font-size: 15px;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.leaderboardCustomers {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.leaderboardCommission {
+  font-size: 15px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--gold);
+}
+
+@media (max-width: 1023.98px) {
+  .overviewGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .overviewGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .overviewValue {
+    font-size: 22px;
+  }
+
+  .leaderboardRow {
+    grid-template-columns: 24px 1fr auto;
+    gap: 10px;
+    grid-template-areas:
+      'rank name commission'
+      '. customers customers';
+  }
+
+  .leaderboardRank {
+    grid-area: rank;
+  }
+
+  .leaderboardName {
+    grid-area: name;
+  }
+
+  .leaderboardCommission {
+    grid-area: commission;
+  }
+
+  .leaderboardCustomers {
+    grid-area: customers;
+  }
+
+  .pendingActionRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1199.98px) {
   .grid {
